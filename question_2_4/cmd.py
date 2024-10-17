@@ -2,7 +2,7 @@ import subprocess
 import re
 import platform
 def detect_networks():
-    p = subprocess. Popen("netsh wlan show networks mode=bssid", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen("netsh wlan show networks mode=bssid", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = p.stdout.read().decode('unicode_escape').strip()
     #print(out)
     if platform.system() == 'Linux':
@@ -15,3 +15,10 @@ def detect_networks():
     p.communicate()
     #print(m)
     return m
+
+def connect_wifi(ssid):
+    p = subprocess.Popen(f"netsh wlan connect name={ssid}",stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out = p.stdout.read().decode('utf-8').strip()
+    print(out)
+    p.communicate()
+    return out

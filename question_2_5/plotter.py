@@ -3,7 +3,7 @@ import os
 import tkinter as tk
 # Add the parent directory of question_2_4 and question_2_5 to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from question_2_4.detect_networks import detect_networks
+from question_2_4.cmd import detect_networks
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg

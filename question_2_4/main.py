@@ -1,4 +1,4 @@
-from detect_networks import detect_networks
+from question_2_4.cmd import detect_networks
 import tkinter as tk
 from tkinter import ttk
 

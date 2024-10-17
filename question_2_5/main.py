@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 # Add the parent directory of question_2_4 and question_2_5 to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from question_2_4.detect_networks import detect_networks
+from question_2_4.cmd import detect_networks,connect_wifi
 
 detect_networks()
 
@@ -19,9 +19,10 @@ root.wm_minsize(400, 300)  # Minimum width of 400 pixels and minimum height of 3
 label = tk.Label(root, text="Click button to show nearby acces points")
 label.pack()  # Automatically place the widget
 
+array=detect_networks()
+sorted_networks = sorted(array, key=lambda x: int(x[1].strip('%')), reverse=True)
+
 def toggle_treeview():
-    array=detect_networks()
-    sorted_networks = sorted(array, key=lambda x: int(x[1].strip('%')), reverse=True)
     global tree_exists, tree
 
     if tree_exists:
@@ -51,6 +52,7 @@ def toggle_treeview():
   
 def show_SSID_infos():
     button.config(state=tk.DISABLED)
+    button1.config(state=tk.NORMAL)
     toggle_treeview()
     
 
@@ -63,12 +65,27 @@ def show_SSID_infos():
 #     text.insert(tk.END,"\n------------------------------\n")
 #     text.config(state=tk.DISABLED)
 
+def connect_ssid():
+    global msg_exists
+    if msg_exists:
+        global label1
+        label1.destroy()
+    #print(type(sorted_networks[0][0]),type(connect_wifi(sorted_networks[0][0])))
+    cnct_msg=connect_wifi(sorted_networks[0][0])
+    msg= "AP Name: "+sorted_networks[0][0]+" -> "+cnct_msg
+    label1 = tk.Label(root, text=msg)
+    label1.pack()
+    msg_exists=True
+msg_exists = False
+
 tree_exists = False
 # button_frame = tk.Frame(root)
 # button_frame.pack(pady=1000)
 button = tk.Button(root, text="Show", command=show_SSID_infos)
 button.pack()
-
+button1 = tk.Button(root, text="Connect to the perfect one", command=connect_ssid)
+button1.pack()
+button1.config(state=tk.DISABLED)
 # text = tk.Text(root, height=100, width=400)
 # text.config(state=tk.DISABLED)
 # text.pack(pady=10)
