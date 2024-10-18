@@ -6,9 +6,7 @@ from tkinter import ttk
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from question_2_4.cmd import detect_networks,connect_wifi
 
-detect_networks()
-
-
+networks = detect_networks()
 
 root = tk.Tk()
 root.title("Access Points Infos")
@@ -19,12 +17,13 @@ root.wm_minsize(400, 300)  # Minimum width of 400 pixels and minimum height of 3
 label = tk.Label(root, text="Click button to show nearby acces points")
 label.pack()  # Automatically place the widget
 
-array=detect_networks()
-sorted_networks = sorted(array, key=lambda x: int(x[1].strip('%')), reverse=True)
+
 
 def toggle_treeview():
+    global networks 
+    array=detect_networks()
+    networks = sorted(array, key=lambda x: int(x[1].strip('%')), reverse=True)
     global tree_exists, tree
-
     if tree_exists:
         tree.destroy()
     # Create a new Treeview widget
@@ -39,7 +38,7 @@ def toggle_treeview():
     tree.column('Signal', width=120, minwidth=120, stretch=True)
 
     # Insert the updated data
-    for ssid, signal in sorted_networks:
+    for ssid, signal in networks:
         # Insert the values
         tree.insert('', tk.END, values=(ssid, signal))
 
@@ -54,6 +53,7 @@ def show_SSID_infos():
     button.config(state=tk.DISABLED)
     button1.config(state=tk.NORMAL)
     toggle_treeview()
+
     
 
 # def show_SSID_infos():
@@ -71,11 +71,12 @@ def connect_ssid():
         global label1
         label1.destroy()
     #print(type(sorted_networks[0][0]),type(connect_wifi(sorted_networks[0][0])))
-    cnct_msg=connect_wifi(sorted_networks[0][0])
-    msg= "AP Name: "+sorted_networks[0][0]+" -> "+cnct_msg
+    cnct_msg=connect_wifi(networks[0][0])
+    msg= "AP Name: "+networks[0][0]+" -> "+cnct_msg
     label1 = tk.Label(root, text=msg)
     label1.pack()
     msg_exists=True
+
 msg_exists = False
 
 tree_exists = False
